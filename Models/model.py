@@ -1,5 +1,6 @@
 from enum import Enum
 
+import random
 
 class Observable:
     def __init__(self):
@@ -40,6 +41,7 @@ class DegreeTypes(Enum):
     MASTERS = 2
     DOCTORATE = 3
 
+
 #</editor-fold>
 
 
@@ -58,18 +60,21 @@ class Person(Observable):
 
 
 class Course(Observable):
-    id = str
+    course_id = str
     exam = Exam
     instructor = Person
     name = str
     ects = int
 
-    def __init__(self, id, name, ects, exam_type):
+    def __init__(self, course_id: str, name: str, ects: int, exam_type: ExamTypes):
         super().__init__()
-        self.id = id
+        self.course_id = course_id
         self.name = name
         self.ects = ects
-        self.exam_type = exam_type
+        self.exam = Exam()
+        self.exam.exam_type = exam_type
+        self.exam.grade = round(random.triangular(1.00, 6.00, 1.6), 2)
+        self.exam.part_of_final_grade = True
 
 
 class Semester(Observable):
@@ -77,11 +82,17 @@ class Semester(Observable):
     courses = []
     semesterAverage = float
 
+    def __init__(self, name: str, courses: [Course]):
+        super().__init__()
+        self.name = name
+        self.courses = courses
+        self.semester_average = None
+
 
 class DegreeProgram(Observable):
     name = str
     degree = DegreeTypes
-    semester = []
+    semesters = []
 
 
 class User(Person):

@@ -8,20 +8,25 @@ import Models.model
 from Models.model import *
 
 class App:
+    user = User
     def __init__(self):
+        self.create_model_objects()
+        
         self.window = Views.root.Root()
+        
+        self.window.left_frame.create_tree_view_from_model(self.user)
 
-        self.CreateModelObjects()
+        
         # Run the main event loop
         self.window.mainloop()
 
 
-    def LoadUserSettings(self):
+    def load_user_settings(self):
         #placeholder
         print("test")
 
 
-    def CreateModelObjects(self):
+    def create_model_objects(self):
         # Create an Exam object
         exam1 = Exam()
         exam1.grade = 80
@@ -71,30 +76,34 @@ class App:
         ]
 
         # Create a Semester object
-        semester1 = Semester()
-        semester1.name = "Spring 2024"
-        semester1.courses = courses
-        semester1.semesterAverage = 85.5
+        semesters = [
+            Semester("Semester 1", courses[:5]),
+            Semester("Semester 2", courses[5:10]),
+            Semester("Semester 3", courses[10:15]),
+            Semester("Semester 4", courses[15:20]),
+            Semester("Semester 5", courses[20:25]),
+            Semester("Semester 6", courses[25:])
+        ]
 
         # Create a DegreeProgram object
         degree_program1 = DegreeProgram()
-        degree_program1.name = "Computer Science"
+        degree_program1.name = "Angewandte Künstliche Intelligenz"
         degree_program1.degree = DegreeTypes.BACHELORS
-        degree_program1.semester = [semester1]
+        degree_program1.semesters = semesters
 
         # Create a User object
-        user1 = User()
-        user1.name = "Alice"
-        user1.last_name = "Smith"
-        user1.email = "alice.smith@example.com"
-        user1.grade_goals = {"CSCI101": 90}
-        user1.style = "Visual"
-        user1.degree_program = degree_program1
+        self.user = User()
+        self.user.name = "Michael"
+        self.user.last_name = "Bätzold"
+        self.user.email = "michael.baetzold@iu-study.org"
+        self.user.grade_goals = {}
+        self.user.style = "Clam"
+        self.user.degree_program = degree_program1
 
         # Print some attributes of the created courses for verification
-        for course in courses:
-            print(
-                f"Course ID: {course.id}, Name: {course.name}, ECTS: {course.ects}, Exam Type: {course.exam_type.value}")
+        #for course in courses:
+        #    print(
+        #        f"Course ID: {course.course_id}, Name: {course.name}, ECTS: {course.ects}, Exam Type: {course.exam_type.value}")
 
 
 

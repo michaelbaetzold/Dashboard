@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
+from Models.model import *
+
 
 class Root(tk.Tk):
     def __init__(self):
@@ -19,13 +21,13 @@ class Root(tk.Tk):
         # Create a frame on the left side
         self.left_frame = SemesterTreeviewFrame(master=self, style="Treeview.TFrame")
         self.left_frame.pack(side="left", fill="y")
-        self.left_frame.place(relx=0, rely=0, width=200, relheight=1)
+        self.left_frame.place(relx=0, rely=0, width=400, relheight=1)
 
 
 
         # Create the frame in the middle
         self.middle_frame = ttk.Frame(self, style="Overview.TFrame")
-        self.middle_frame.pack(fill="both", expand=True, padx=(210, 10))
+        self.middle_frame.pack(fill="both", expand=True, padx=(410, 10))
         # self.middle_frame.place(x=210, rely=0, relheight=1)
 
 
@@ -34,18 +36,31 @@ class SemesterTreeviewFrame(ttk.Frame):
         super().__init__(*args, **kwargs)
 
         #Create Header
-        self.header = ttk.Label(master=self, text="Semesterübersicht")
+        self.header = ttk.Label(master=self, text="Studienübersicht")
         self.header.pack(side="top", pady=5)
 
         # Create a Treeview widget in the left frame
         self.treeview = ttk.Treeview(self, columns=("Durchschnitt",), show="tree")
-        self.treeview.column("#0", width=150)
+        self.treeview.column("#0", width=350)
         self.treeview.column("#1", width=50)
         self.treeview.pack(fill="both", expand=True)
 
-        self.addTreeviewNodes()
+        #self.addTreeviewNodes()
 
-    def addTreeviewNodes(self):
+    def create_tree_view_from_model(self, user: User):
+
+        self.treeview.insert("", "end", "root_node", text=user.degree_program.name)
+
+        for semester_num, semester in enumerate(user.degree_program.semesters, start=1):
+            # Insert the semester node under the root node
+            semester_node = self.treeview.insert("root_node", "end", text=f"Semester {semester_num}")
+
+            # Iterate over each course in the semester
+            for course in semester.courses:
+                # Insert the course node under the semester node
+                self.treeview.insert(semester_node, "end", text=course.name, values=(course.exam.grade,))
+
+    def add_treeview_nodes(self):
         # Add the top node "Semester" and its sub-nodes "Semester 1" and "Semester 2"
         self.treeview.insert("", "end", "root_node", text="Semester")
         self.treeview.insert("root_node", iid="semester_1", index="end", text="Semester 1", values=("2",))
