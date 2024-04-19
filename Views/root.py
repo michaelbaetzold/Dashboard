@@ -17,6 +17,7 @@ class Root(tk.Tk):
         self.style = ttk.Style(self)
         self.style.configure('Overview.TFrame', background="blue")
         self.style.configure('Treeview.TFrame', background="green")
+        self.style.configure('TFrame', background="orange")
 
         # Create a frame on the left side
         self.left_frame = SemesterTreeviewFrame(master=self, style="Treeview.TFrame")
@@ -26,9 +27,9 @@ class Root(tk.Tk):
 
 
         # Create the frame in the middle
-        self.middle_frame = ttk.Frame(self, style="Overview.TFrame")
+        self.middle_frame = CourseOverviewFrame(self, style="Overview.TFrame")
         self.middle_frame.pack(fill="both", expand=True, padx=(410, 10))
-        # self.middle_frame.place(x=210, rely=0, relheight=1)
+
 
 
 class SemesterTreeviewFrame(ttk.Frame):
@@ -87,7 +88,6 @@ class SemesterTreeviewFrame(ttk.Frame):
             if values and values[0] == "B":
                 self.treeview.item(child, tags=("bg_B",))
 
-
 class SemesterTreeview(ttk.Treeview):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -124,4 +124,53 @@ class SemesterTreeview(ttk.Treeview):
                 current_color = entry["color"]
 
         return current_color
+
+
+class CourseOverviewFrame(ttk.Frame):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Course frame containing course name and course ID labels
+        self.course_frame = ttk.Frame(self)
+        self.course_frame.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+
+        # Course name label
+        self.course_name_label = ttk.Label(self.course_frame, text="course_name", font=("Arial", 16, "bold"))
+        self.course_name_label.grid(row=0, column=0, sticky="ew")
+
+        # Course ID label
+        self.course_id_label = ttk.Label(self.course_frame, text=f"Course ID: {"course_id"}", font=("Arial", 12))
+        self.course_id_label.grid(row=1, column=0, sticky="w")
+
+        # Exam details frame
+        self.exam_frame = ttk.Frame(self)
+        ttk.Label(self.exam_frame, text="Exam Details").grid(row=0, column=0, sticky="w")
+        ttk.Label(self.exam_frame, text="exam_details").grid(row=1, column=0, sticky="w")
+        self.exam_frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
+
+        # Instructor details frame
+        self.instructor_frame = ttk.Frame(self)
+        ttk.Label(self.instructor_frame, text="Instructor").grid(row=0, column=0, sticky="w")
+        ttk.Label(self.instructor_frame, text="instructor_name").grid(row=1, column=0, sticky="w")
+        self.instructor_frame.grid(row=2, column=0, sticky="nsew", padx=10, pady=10)
+
+        # Buttons frame (for edit and save buttons)
+        self.buttons_frame = ttk.Frame(self)
+
+        # Edit button
+        self.edit_button = ttk.Button(self.buttons_frame, text="Edit")
+        self.edit_button.grid(row=0, column=0, padx=(0, 5))
+
+        # Save button
+        self.save_button = ttk.Button(self.buttons_frame, text="Save")
+        self.save_button.grid(row=0, column=1)
+
+        self.buttons_frame.grid(row=3, column=0, sticky="nsew", padx=10, pady=10)
+
+        # Configure row and column weights
+        self.grid_rowconfigure(0, weight=1, uniform="row_weight")
+        self.grid_rowconfigure(1, weight=1, uniform="row_weight")
+        self.grid_rowconfigure(2, weight=1, uniform="row_weight")
+        self.grid_rowconfigure(3, weight=1, uniform="row_weight")
+        self.grid_columnconfigure(0, weight=1)
 
