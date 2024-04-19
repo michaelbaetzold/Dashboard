@@ -40,12 +40,10 @@ class SemesterTreeviewFrame(ttk.Frame):
         self.header.pack(side="top", pady=5)
 
         # Create a Treeview widget in the left frame
-        self.treeview = ttk.Treeview(self, columns=("Durchschnitt",), show="tree")
+        self.treeview = SemesterTreeview(self, columns=("Durchschnitt",), show="tree")
         self.treeview.column("#0", width=350)
         self.treeview.column("#1", width=50)
         self.treeview.pack(fill="both", expand=True)
-
-        #self.addTreeviewNodes()
 
     def create_tree_view_from_model(self, user: User):
 
@@ -88,4 +86,42 @@ class SemesterTreeviewFrame(ttk.Frame):
             values = self.treeview.item(child)["values"]
             if values and values[0] == "B":
                 self.treeview.item(child, tags=("bg_B",))
+
+
+class SemesterTreeview(ttk.Treeview):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Create the color table
+        self.__grade_table_list = [
+            {"grade": 6.0, "color": "red"},
+            {"grade": 4.0, "color": "orange"},
+            {"grade": 2.0, "color": "yellow"},
+            {"grade": 1.5, "color": "green"}
+        ]
+
+        # Create the color tags
+        for entry in self.__grade_table_list:
+            self.tag_configure(entry["color"], background=entry["color"])
+
+    def insert(self, parent, index, *args, **kwargs):
+        # Call the original insert method to perform the insertion
+        result = super().insert(parent, index, *args, **kwargs)
+
+        # Set the color based on the grade_table_list
+        if 'values' in kwargs:
+            color = self.__get_grade_color(kwargs['values'][0])
+            self.item(result, tags=color)
+        return result
+
+    def __get_grade_color(self, grade: float):
+        current_color = "white"
+        if grade <= 0.00:
+            return current_color
+
+        for entry in self.__grade_table_list:
+            if grade <= entry["grade"]:
+                current_color = entry["color"]
+
+        return current_color
 

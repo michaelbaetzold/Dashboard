@@ -73,7 +73,7 @@ class Course(Observable):
         self.ects = ects
         self.exam = Exam()
         self.exam.exam_type = exam_type
-        self.exam.grade = round(random.triangular(1.00, 6.00, 1.6), 2)
+        self.exam.grade = round(random.triangular(1.00, 6.00, 1.3), 2)
         self.exam.part_of_final_grade = True
 
 
