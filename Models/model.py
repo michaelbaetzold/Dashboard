@@ -2,38 +2,20 @@ from enum import Enum
 
 import random
 
-class Observable:
-    def __init__(self):
-        self._event_listeners = {}
-
-    def add_event_listener(self, event, fn):
-        try:
-            self._event_listeners[event].append(fn)
-        except KeyError:
-            self._event_listeners[event] = [fn]
-
-        return lambda: self._event_listeners[event].remove(fn)
-
-    def trigger_event(self, event):
-        if event not in self._event_listeners.keys():
-            return
-
-        for func in self._event_listeners[event]:
-            func(self)
-
 
 # <editor-fold desc="Enums">
 class ExamTypes(Enum):
-    WRITTEN_EXAM = 1
-    TECHNICAL_PRESENTATION = 2
-    ADVANCED_WORKBOOK = 3
-    PORTFOLIO = 4
-    CASE_STUDY = 5
-    PROJECT_REPORT = 6
-    PROJECT_PRESENTATION = 7
-    SEMINAR_PAPER = 8
-    ACADEMIC_PAPER = 9
-    BACHELOR_THESIS = 10
+    WRITTEN_EXAM = "Klausur"
+    TECHNICAL_PRESENTATION = "Fachpräsentation"
+    ADVANCED_WORKBOOK = "Advanced Workbook"
+    PORTFOLIO = "Portfolio"
+    CASE_STUDY = "Fallstudie"
+    PROJECT_REPORT = "Projektbericht"
+    PROJECT_PRESENTATION = "Projektpräsentation"
+    SEMINAR_PAPER = "Seminararbeit"
+    ACADEMIC_PAPER = "Hausarbeit"
+    BACHELOR_THESIS = "Bachelorarbeit"
+    UNKNOWN = "Unbekannt"
 
 
 class DegreeTypes(Enum):
@@ -46,23 +28,16 @@ class DegreeTypes(Enum):
 
 
 # <editor-fold desc="Classes">
-class Exam(Observable):
+class Exam:
     grade = float
     exam_type = ExamTypes
     attempt = int
     part_of_final_grade = bool
 
 
-class Person(Observable):
-    name = str
-    last_name = str
-    email = str
-
-
-class Course(Observable):
+class Course:
     course_id = str
     exam = Exam
-    instructor = Person
     name = str
     ects = int
 
@@ -75,9 +50,10 @@ class Course(Observable):
         self.exam.exam_type = exam_type
         self.exam.grade = round(random.triangular(1.00, 6.00, 1.3), 2)
         self.exam.part_of_final_grade = True
+        self.exam.attempt = 1
 
 
-class Semester(Observable):
+class Semester:
     name = str
     courses = []
     semesterAverage = float
@@ -86,18 +62,105 @@ class Semester(Observable):
         super().__init__()
         self.name = name
         self.courses = courses
-        self.semester_average = None
+        self.semester_average = 0.00
 
 
-class DegreeProgram(Observable):
+class DegreeProgram:
     name = str
     degree = DegreeTypes
     semesters = []
 
 
-class User(Person):
+class User:
     grade_goals = {}
     style = str
     degree_program = DegreeProgram
 
 #</editor-fold>
+
+class Model:
+    def __init__(self):
+        self.__user = self.load_model_objects()
+
+    def get_degree_program(self):
+        return self.__user.degree_program
+
+    def get_course_from_name(self, name):
+        for semester in self.__user.degree_program.semesters:
+            for course in semester.courses:
+                if course.name == name:
+                    return course
+        return None
+
+    def load_model_objects(self) -> User:
+        # Create an Exam object
+        exam1 = Exam()
+        exam1.grade = 80
+        exam1.exam_type = ExamTypes.WRITTEN_EXAM
+        exam1.attempt = 0
+        exam1.part_of_final_grade = True
+
+        # Create a Course object
+        courses = [
+            Course("DLBDSEAIS01_D", "Artificial Intelligence", 5, ExamTypes.WRITTEN_EXAM),
+            Course("DLBWIRITT01", "Einführung in das wissenschaftliche Arbeiten für IT und Technik", 5,
+                   ExamTypes.ADVANCED_WORKBOOK),
+            Course("DLBDSIPWP01_D", "Einführung in die Programmierung mit Python", 5, ExamTypes.WRITTEN_EXAM),
+            Course("DLBBIMD01", "Mathematics: Analysis", 5, ExamTypes.WRITTEN_EXAM),
+            Course("DLBKA01", "Kollaboratives Arbeiten", 5, ExamTypes.TECHNICAL_PRESENTATION),
+            Course("DLBDSSPDS01_D", "Statistics - Probability and Descriptive Statistics", 5, ExamTypes.WRITTEN_EXAM),
+            Course("DLBDSOOFPP01_D", "Objektorientierte und funktionale Programmierung mit Python", 5,
+                   ExamTypes.PORTFOLIO),
+            Course("DLBBIM01", "Mathematik: Lineare Algebra", 5, ExamTypes.WRITTEN_EXAM),
+            Course("DLBIHK01", "Interkulturelle und ethische Handlungskompetenz", 5, ExamTypes.CASE_STUDY),
+            Course("DLBDSSIS01_D", "Statistik - Schließende Statistik", 5, ExamTypes.WRITTEN_EXAM),
+            Course("DLBDSCC01_D", "Cloud Computing", 5, ExamTypes.WRITTEN_EXAM),
+            Course("DLBSEPCP01_D", "Cloud Programming", 5, ExamTypes.PORTFOLIO),
+            Course("DLBDSMLSL01_D", "Maschinelles Lernen - Supervised Learning", 5, ExamTypes.WRITTEN_EXAM),
+            Course("DLBDSMLUSL01_D", "Maschinelles Lernen - Unsupervised Learning und Feature Engineering", 5,
+                   ExamTypes.CASE_STUDY),
+            Course("DLBDSNNDL01_D", "Neuronale Netze und Deep Learning", 5, ExamTypes.TECHNICAL_PRESENTATION),
+            Course("DLBAIICV01_D", "Einführung in Computer Vision", 5, ExamTypes.WRITTEN_EXAM),
+            Course("DLBAIPCV01_D", "Projekt: Computer Vision", 5, ExamTypes.PROJECT_REPORT),
+            Course("DLBAIIRL01_D", "Einführung in das Reinforcement Learning", 5, ExamTypes.WRITTEN_EXAM),
+            Course("DLBAIINLP01_D", "Einführung in NLP", 5, ExamTypes.WRITTEN_EXAM),
+            Course("DLBAIPNLP01_D", "Projekt: NLP", 5, ExamTypes.PROJECT_REPORT),
+            Course("DLBISIC01", "Einführung in Datenschutz und IT-Sicherheit", 5, ExamTypes.WRITTEN_EXAM),
+            Course("DLBDSDSSE01_D", "Data Science Software Engineering", 5, ExamTypes.WRITTEN_EXAM),
+            Course("DLBDSMTP01_D", "Projekt: Vom Modell zum Produktvertrieb", 5, ExamTypes.PROJECT_REPORT),
+            Course("DLBDSSECDS01_D", "Seminar: Ethische Fragen der Data Science", 5, ExamTypes.SEMINAR_PAPER),
+            Course("DLBMIUEX01", "User Experience", 5, ExamTypes.WRITTEN_EXAM),
+            Course("DLBAIPEAI01_D", "Projekt: Edge AI", 5, ExamTypes.PROJECT_REPORT),
+            Course("DLBROIR01_D", "Einführung in die Robotik", 5, ExamTypes.ACADEMIC_PAPER),
+            Course("DLBDBAPM01", "Agiles Projektmanagement", 5, ExamTypes.PROJECT_REPORT),
+            Course("", "Wahlpflichtmodul A", 10, ExamTypes.UNKNOWN),
+            Course("", "Wahlpflichtmodul B", 10, ExamTypes.UNKNOWN),
+            Course("", "Wahlpflichtmodul C", 10, ExamTypes.UNKNOWN),
+            Course("BBAK01, BBAK02", "Bachelorarbeit", 10, ExamTypes.BACHELOR_THESIS)
+        ]
+
+        # Create a Semester object
+        semesters = [
+            Semester("Semester 1", courses[:5]),
+            Semester("Semester 2", courses[5:9]),
+            Semester("Semester 3", courses[9:14]),
+            Semester("Semester 4", courses[14:18]),
+            Semester("Semester 5", courses[18:23]),
+            Semester("Semester 6", courses[23:27]),
+            Semester("Semester 8", courses[27:30]),
+            Semester("Semester 6", courses[30:])
+        ]
+
+        # Create a DegreeProgram object
+        degree_program1 = DegreeProgram()
+        degree_program1.name = "Angewandte Künstliche Intelligenz"
+        degree_program1.degree = DegreeTypes.BACHELORS
+        degree_program1.semesters = semesters
+
+        # Create a User object
+        user = User()
+        user.grade_goals = {}
+        user.style = "Clam"
+        user.degree_program = degree_program1
+
+        return user
