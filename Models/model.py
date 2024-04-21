@@ -24,7 +24,6 @@ class ExamTypes(Enum):
                 return exam
 
 
-
 class DegreeTypes(Enum):
     BACHELORS = 1
     MASTERS = 2
@@ -60,6 +59,7 @@ class Exam:
             json_data["part_of_final_grade"]
         )
 
+
 class Course:
     def __init__(self, course_id: str, name: str, ects: int, exam: Exam):
         self.course_id = course_id
@@ -78,6 +78,7 @@ class Course:
     @classmethod
     def from_json(cls, json_data):
         return cls(json_data["course_id"], json_data["name"], json_data["ects"], Exam.from_json(json_data["exam"]))
+
 
 class Semester:
     def __init__(self, name: str, courses: [Course], semester_average: float):
@@ -107,6 +108,7 @@ class Semester:
         semester_average = 0.0
         return cls(json_data["name"], courses, semester_average)
 
+
 class DegreeProgram:
     def __init__(self, name: str, degree: DegreeTypes, semesters: [Semester], start_date: datetime, end_date: datetime):
         self.name = name
@@ -131,6 +133,7 @@ class DegreeProgram:
         end_date = datetime.strptime(json_data["end_date"], "%d %B %Y")
         return cls(json_data["name"], DegreeTypes(json_data["degree"]), semesters, start_date, end_date)
 
+
 class User:
     def __init__(self, grade_goals: dict, style: str, degree_program: DegreeProgram):
         self.grade_goals = grade_goals
@@ -150,6 +153,7 @@ class User:
         return cls(json_data["grade_goals"], json_data["style"], degree_program)
 
 # </editor-fold>
+
 
 class Model:
     FILE_PATH = "data.json"
@@ -194,7 +198,6 @@ class Model:
                     semester.update_semester_average()
                     return
         print("unsuccessful update")
-
 
     def load_model_objects(self) -> User: # Keep as backup
         exams = [
