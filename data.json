@@ -1,0 +1,412 @@
+{
+    "grade_goals": {},
+    "style": "Clam",
+    "degree_program": {
+        "name": "Angewandte K\u00fcnstliche Intelligenz",
+        "degree": 1,
+        "semesters": [
+            {
+                "name": "Semester 1",
+                "courses": [
+                    {
+                        "course_id": "DLBDSEAIS01_D",
+                        "name": "Artificial Intelligence",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 2.1,
+                            "exam_type": "Klausur",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBWIRITT01",
+                        "name": "Einf\u00fchrung in das wissenschaftliche Arbeiten f\u00fcr IT und Technik",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Advanced Workbook",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBDSIPWP01_D",
+                        "name": "Einf\u00fchrung in die Programmierung mit Python",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 1.0,
+                            "exam_type": "Klausur",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBBIMD01",
+                        "name": "Mathematics: Analysis",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 3.6,
+                            "exam_type": "Klausur",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBKA01",
+                        "name": "Kollaboratives Arbeiten",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 1.0,
+                            "exam_type": "Fachpr\u00e4sentation",
+                            "attempt": 1,
+                            "part_of_final_grade": false
+                        }
+                    }
+                ],
+                "semester_average": 2.2333333333333334
+            },
+            {
+                "name": "Semester 2",
+                "courses": [
+                    {
+                        "course_id": "DLBDSSPDS01_D",
+                        "name": "Statistics - Probability and Descriptive Statistics",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Klausur",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBDSOOFPP01_D",
+                        "name": "Objektorientierte und funktionale Programmierung mit Python",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Portfolio",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBBIM01",
+                        "name": "Mathematik: Lineare Algebra",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Klausur",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBIHK01",
+                        "name": "Interkulturelle und ethische Handlungskompetenz",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Fallstudie",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    }
+                ],
+                "semester_average": 0.0
+            },
+            {
+                "name": "Semester 3",
+                "courses": [
+                    {
+                        "course_id": "DLBDSSIS01_D",
+                        "name": "Statistik - Schlie\u00dfende Statistik",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Klausur",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBDSCC01_D",
+                        "name": "Cloud Computing",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Klausur",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBSEPCP01_D",
+                        "name": "Cloud Programming",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Portfolio",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBDSMLSL01_D",
+                        "name": "Maschinelles Lernen - Supervised Learning",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Klausur",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBDSMLUSL01_D",
+                        "name": "Maschinelles Lernen - Unsupervised Learning und Feature Engineering",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Fallstudie",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    }
+                ],
+                "semester_average": 0.0
+            },
+            {
+                "name": "Semester 4",
+                "courses": [
+                    {
+                        "course_id": "DLBDSNNDL01_D",
+                        "name": "Neuronale Netze und Deep Learning",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Fachpr\u00e4sentation",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBAIICV01_D",
+                        "name": "Einf\u00fchrung in Computer Vision",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Klausur",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBAIPCV01_D",
+                        "name": "Projekt: Computer Vision",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Projektbericht",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBAIIRL01_D",
+                        "name": "Einf\u00fchrung in das Reinforcement Learning",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Klausur",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    }
+                ],
+                "semester_average": 0.0
+            },
+            {
+                "name": "Semester 5",
+                "courses": [
+                    {
+                        "course_id": "DLBAIINLP01_D",
+                        "name": "Einf\u00fchrung in NLP",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Klausur",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBAIPNLP01_D",
+                        "name": "Projekt: NLP",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Projektbericht",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBISIC01",
+                        "name": "Einf\u00fchrung in Datenschutz und IT-Sicherheit",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Klausur",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBDSDSSE01_D",
+                        "name": "Data Science Software Engineering",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Klausur",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBDSMTP01_D",
+                        "name": "Projekt: Vom Modell zum Produktvertrieb",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Projektbericht",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    }
+                ],
+                "semester_average": 0.0
+            },
+            {
+                "name": "Semester 6",
+                "courses": [
+                    {
+                        "course_id": "DLBDSSECDS01_D",
+                        "name": "Seminar: Ethische Fragen der Data Science",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Seminararbeit",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBMIUEX01",
+                        "name": "User Experience",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Klausur",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBAIPEAI01_D",
+                        "name": "Projekt: Edge AI",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Projektbericht",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "DLBROIR01_D",
+                        "name": "Einf\u00fchrung in die Robotik",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Hausarbeit",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    }
+                ],
+                "semester_average": 0.0
+            },
+            {
+                "name": "Semester 7",
+                "courses": [
+                    {
+                        "course_id": "DLBDBAPM01",
+                        "name": "Agiles Projektmanagement",
+                        "ects": 5,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Projektbericht",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "",
+                        "name": "Wahlpflichtmodul A",
+                        "ects": 10,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Unbekannt",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "",
+                        "name": "Wahlpflichtmodul B",
+                        "ects": 10,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Unbekannt",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    }
+                ],
+                "semester_average": 0.0
+            },
+            {
+                "name": "Semester 8",
+                "courses": [
+                    {
+                        "course_id": "",
+                        "name": "Wahlpflichtmodul C",
+                        "ects": 10,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Unbekannt",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    },
+                    {
+                        "course_id": "BBAK01, BBAK02",
+                        "name": "Bachelorarbeit",
+                        "ects": 10,
+                        "exam": {
+                            "grade": 0.0,
+                            "exam_type": "Bachelorarbeit",
+                            "attempt": 1,
+                            "part_of_final_grade": true
+                        }
+                    }
+                ],
+                "semester_average": 0.0
+            }
+        ],
+        "start_date": "28 November 2023",
+        "end_date": "28 November 2027"
+    }
+}
