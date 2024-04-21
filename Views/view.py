@@ -44,9 +44,6 @@ class View:
         self.central_frame = self.views[view_name]
         self.central_frame.tkraise()
 
-        # Trigger custom event
-        self.root.event_generate("<<SwitchView>>")
-
     def start_mainloop(self):
         self.root.mainloop()
 
@@ -64,7 +61,9 @@ class DegreeView(ttk.Frame):
         self.grid_rowconfigure(5, weight=2)
         self.grid_columnconfigure(0, weight=1)
 
-        self.label = ttk.Label(self, text="Welcome to this View", font=("Arial", 24))
+        self.degree_name_var = tk.StringVar()
+
+        self.label = ttk.Label(self, textvariable=self.degree_name_var, font=("Arial", 24))
         self.label.grid(row=0, column=0, sticky="nsew")
 
         self.label_progress = ttk.Label(self, text="Studienfortschritt")
@@ -82,6 +81,26 @@ class DegreeView(ttk.Frame):
         # Set initial values for progress bars (if needed)
         self.progress_bar["value"] = 50  # Example value
         self.exams_bar["value"] = 30  # Example value
+
+    def update_view_from_model(self, degree: DegreeProgram):
+        self.degree_name_var.set(degree.name)
+        # Check how far the user is in the degree
+        current_date = datetime.now()
+        total_duration = (degree.end_date - degree.start_date).days
+        current_duration = (current_date - degree.start_date).days
+        progress_percent = (current_duration / total_duration) * 100
+        self.progress_bar["value"] = progress_percent
+
+        # Check the amount of ects the user gathered
+        ects_sum = 0
+        total_sum = 0
+        for semester in degree.semesters:
+            for course in semester.courses:
+                total_sum += course.ects
+                if 0 < course.exam.grade < 4:
+                    ects_sum += course.ects
+        self.exams_bar["value"] = (ects_sum/total_sum) * 100
+
 
 
 class SemesterOverView(ttk.Frame):
@@ -215,8 +234,12 @@ class SemesterView(ttk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # StringVars for header labels
+        self.semester_name_var = tk.StringVar()
+        self.semester_name_var.set("Semester 1")  # Set default semester name
+
         # Header label with big font
-        self.header_label = ttk.Label(self, text="semester_name", font=("Arial", 24, "bold"))
+        self.header_label = ttk.Label(self, textvariable=self.semester_name_var, font=("Arial", 24, "bold"))
         self.header_label.grid(row=0, column=0, columnspan=2, pady=10)
 
         # label for treeview
@@ -228,5 +251,17 @@ class SemesterView(ttk.Frame):
         self.treeview.grid(row=2, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
 
         # Define column headings
-        self.treeview.heading("Course ID", text="Course ID")
-        self.treeview.heading("Course Name", text="Course Name")
+        self.treeview.heading("Course ID", text="Kurs ID")
+        self.treeview.heading("Course Name", text="Kurs Name")
+
+    def update_view_from_model(self, semester: Semester):
+        self.semester_name_var.set(semester.name)
+        # Clear existing items in the treeview
+        for item in self.treeview.get_children():
+            self.treeview.delete(item)
+
+        # Loop over semester courses
+        for course in semester.courses:
+            if course.exam.grade <= 0:
+                # Add course ID and name to the treeview
+                self.treeview.insert("", "end", values=(course.course_id, course.name))

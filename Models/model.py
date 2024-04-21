@@ -1,4 +1,5 @@
 from enum import Enum
+from datetime import datetime
 
 import random
 
@@ -28,68 +29,173 @@ class DegreeTypes(Enum):
 
 
 # <editor-fold desc="Classes">
-class Exam:
-    grade = float
-    exam_type = ExamTypes
-    attempt = int
-    part_of_final_grade = bool
 
+class Exam:
+    def __init__(self, grade: float, exam_type: ExamTypes, attempt: int, part_of_final_grade: bool):
+        self.grade = grade
+        self.exam_type = exam_type
+        self.attempt = attempt
+        self.part_of_final_grade = part_of_final_grade
+
+    def to_json(self):
+        return {
+            "grade": self.grade,
+            "exam_type": self.exam_type.value,
+            "attempt": self.attempt,
+            "part_of_final_grade": self.part_of_final_grade
+        }
+
+    @classmethod
+    def from_json(cls, json_data):
+        return cls(**json_data)
 
 class Course:
-    course_id = str
-    exam = Exam
-    name = str
-    ects = int
-
-    def __init__(self, course_id: str, name: str, ects: int, exam_type: ExamTypes):
-        super().__init__()
+    def __init__(self, course_id: str, name: str, ects: int, exam: Exam):
         self.course_id = course_id
         self.name = name
         self.ects = ects
-        self.exam = Exam()
-        self.exam.exam_type = exam_type
-        self.exam.grade = round(random.triangular(1.00, 6.00, 1.3), 2)
-        self.exam.part_of_final_grade = True
-        self.exam.attempt = 1
+        self.exam = exam
 
+    def to_json(self):
+        return {
+            "course_id": self.course_id,
+            "name": self.name,
+            "ects": self.ects,
+            "exam": self.exam.to_json()
+        }
+
+    @classmethod
+    def from_json(cls, json_data):
+        return cls(json_data["course_id"], json_data["name"], json_data["ects"], Exam.from_json(json_data["exam"]))
 
 class Semester:
-    name = str
-    courses = []
-    semesterAverage = float
-
-    def __init__(self, name: str, courses: [Course]):
-        super().__init__()
+    def __init__(self, name: str, courses: [Course], semester_average: float):
         self.name = name
         self.courses = courses
-        self.semester_average = 0.00
+        self.semester_average = semester_average
 
+    def to_json(self):
+        return {
+            "name": self.name,
+            "courses": [course.to_json() for course in self.courses],
+            "semester_average": self.semester_average
+        }
+
+    @classmethod
+    def from_json(cls, json_data):
+        return cls(json_data["name"], [Course.from_json(course_data) for course_data in json_data["courses"]], json_data["semester_average"])
 
 class DegreeProgram:
-    name = str
-    degree = DegreeTypes
-    semesters = []
+    def __init__(self, name: str, degree: DegreeTypes, semesters: [Semester], start_date: datetime, end_date: datetime):
+        self.name = name
+        self.degree = degree
+        self.semesters = semesters
+        self.start_date = start_date
+        self.end_date = end_date
 
+    def to_json(self):
+        return {
+            "name": self.name,
+            "degree": self.degree.value,
+            "semesters": [semester.to_json() for semester in self.semesters],
+            "start_date": self.start_date.strftime("%d %B %Y"),
+            "end_date": self.end_date.strftime("%d %B %Y")
+        }
+
+    @classmethod
+    def from_json(cls, json_data):
+        semesters = [Semester.from_json(semester_data) for semester_data in json_data["semesters"]]
+        start_date = datetime.strptime(json_data["start_date"], "%d %B %Y")
+        end_date = datetime.strptime(json_data["end_date"], "%d %B %Y")
+        return cls(json_data["name"], DegreeTypes(json_data["degree"]), semesters, start_date, end_date)
 
 class User:
-    grade_goals = {}
-    style = str
-    degree_program = DegreeProgram
+    def __init__(self, grade_goals: dict, style: str, degree_program: DegreeProgram):
+        self.grade_goals = grade_goals
+        self.style = style
+        self.degree_program = degree_program
+
+    def to_json(self):
+        return {
+            "grade_goals": self.grade_goals,
+            "style": self.style,
+            "degree_program": self.degree_program.to_json()
+        }
+
+    @classmethod
+    def from_json(cls, json_data):
+        degree_program = DegreeProgram.from_json(json_data["degree_program"])
+        return cls(json_data["grade_goals"], json_data["style"], degree_program)
+# class Exam:
+#     grade = float
+#     exam_type = ExamTypes
+#     attempt = int
+#     part_of_final_grade = bool
+#
+#
+# class Course:
+#     course_id = str
+#     exam = Exam
+#     name = str
+#     ects = int
+#
+#     def __init__(self, course_id: str, name: str, ects: int, exam_type: ExamTypes):
+#         super().__init__()
+#         self.course_id = course_id
+#         self.name = name
+#         self.ects = ects
+#         self.exam = Exam()
+#         self.exam.exam_type = exam_type
+#         self.exam.grade = 0.00 #round(random.triangular(1.00, 6.00, 1.3), 2)
+#         self.exam.part_of_final_grade = True
+#         self.exam.attempt = 1
+#
+#
+# class Semester:
+#     name = str
+#     courses = []
+#     semesterAverage = float
+#
+#     def __init__(self, name: str, courses: [Course]):
+#         super().__init__()
+#         self.name = name
+#         self.courses = courses
+#         self.semester_average = 0.00
+#
+#
+# class DegreeProgram:
+#     name = str
+#     degree = DegreeTypes
+#     semesters = []
+#     start_date = datetime.strptime("28 November 2023", "%d %B %Y")
+#     end_date = datetime.strptime("28 November 2027", "%d %B %Y")
+#
+#
+# class User:
+#     grade_goals = {}
+#     style = str
+#     degree_program = DegreeProgram
 
 #</editor-fold>
 
 class Model:
     def __init__(self):
-        self.__user = self.load_model_objects()
+        self.user = self.load_model_objects()
 
     def get_degree_program(self):
-        return self.__user.degree_program
+        return self.user.degree_program
 
     def get_course_from_name(self, name):
-        for semester in self.__user.degree_program.semesters:
+        for semester in self.user.degree_program.semesters:
             for course in semester.courses:
                 if course.name == name:
                     return course
+        return None
+
+    def get_semester_from_name(self, name):
+        for semester in self.user.degree_program.semesters:
+            if semester.name == name:
+                return semester
         return None
 
     def load_model_objects(self) -> User:

@@ -3,7 +3,7 @@ from Views.view import *
 
 import Models.model
 from Models.model import *
-
+import json
 import sys
 
 class Controller:
@@ -13,6 +13,7 @@ class Controller:
         self.__view.left_frame.create_tree_view_from_model(self.__model.get_degree_program())
         self.__view.left_frame.treeview.bind("<<TreeviewSelect>>", self.on_semester_treeview_click)
         self.__view.switch("degree")
+        self.handle_update_degree_view("this string is irrelevant")
         self.__view.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.__view.start_mainloop()
 
@@ -33,15 +34,21 @@ class Controller:
         self.__view.central_frame.update_view_from_model(self.__model.get_course_from_name(item_name))
 
     def handle_update_degree_view(self, item_name):
-        # Code to handle the degree view
-        print("Handling degree view")
+        self.__view.central_frame.update_view_from_model(self.__model.get_degree_program())
 
     def handle_update_semester_view(self, item_name):
-        # Code to handle the semester view
-        print("Handling semester view")
+        self.__view.central_frame.update_view_from_model(self.__model.get_semester_from_name(item_name))
 
     def on_close(self):
-        print("save data")
+        # Define the file path
+        file_path = "nested_data.json"
+
+        # Serialize the object to JSON with indentation for readability
+        json_data = json.dumps(self.__model.user, indent=4)
+
+        # Write the JSON data to a file
+        with open(file_path, "w") as file:
+            file.write(json_data)
 
         sys.exit()
 
