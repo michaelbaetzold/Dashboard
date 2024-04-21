@@ -1,7 +1,6 @@
 import tkinter as tk
 from operator import xor
 from tkinter import ttk
-
 from Models.model import *
 
 
@@ -15,9 +14,12 @@ class Root(tk.Tk):
 
         # Configure the style for the entire application
         self.style = ttk.Style(self)
-        self.style.configure('Overview.TFrame', background="blue")
-        self.style.configure('Treeview.TFrame', background="green")
-        self.style.configure('TFrame', background="orange")
+
+        # Set debug styles
+        if False:
+            self.style.configure('Overview.TFrame', background="blue")
+            self.style.configure('Treeview.TFrame', background="green")
+            self.style.configure('TFrame', background="orange")
 
 
 class View:
@@ -129,9 +131,7 @@ class SemesterOverView(ttk.Frame):
                 "end", text=f"Semester {semester_num}",
                 values=(semester.semester_average, "semester"))
 
-            # Iterate over each course in the semester
             for course in semester.courses:
-                # Insert the course node under the semester node
                 self.treeview.insert(semester_node, "end", text=course.name, values=(course.exam.grade, "course"))
 
 
@@ -141,10 +141,10 @@ class SemesterTreeview(ttk.Treeview):
 
         # Create the color table
         self.__grade_table_list = [
-            {"grade": 6.0, "color": "red"},
-            {"grade": 4.0, "color": "orange"},
-            {"grade": 2.0, "color": "yellow"},
-            {"grade": 1.5, "color": "green"}
+            {"grade": 6.0, "color": "#FF2C2C"},
+            {"grade": 2.5, "color": "orange"},
+            {"grade": 1.7, "color": "yellow"},
+            {"grade": 1.3, "color": "#39E75F"}
         ]
 
         # Create the color tags

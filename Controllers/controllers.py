@@ -1,10 +1,9 @@
 import Views.view
 from Views.view import *
-
 import Models.model
 from Models.model import *
-import json
 import sys
+
 
 class Controller:
     def __init__(self, model: Model, view: View):
@@ -32,6 +31,7 @@ class Controller:
 
     def handle_update_course_view(self, item_name):
         self.__view.central_frame.update_view_from_model(self.__model.get_course_from_name(item_name))
+        self.__view.central_frame.button.bind("<Button-1>", self.handle_save_course_details)
 
     def handle_update_degree_view(self, item_name):
         self.__view.central_frame.update_view_from_model(self.__model.get_degree_program())
@@ -39,21 +39,10 @@ class Controller:
     def handle_update_semester_view(self, item_name):
         self.__view.central_frame.update_view_from_model(self.__model.get_semester_from_name(item_name))
 
+    def handle_save_course_details(self, event):
+        print("asd")
+
     def on_close(self):
-        # Define the file path
-        file_path = "nested_data.json"
-
-        # Serialize the object to JSON with indentation for readability
-        json_data = json.dumps(self.__model.user, indent=4)
-
-        # Write the JSON data to a file
-        with open(file_path, "w") as file:
-            file.write(json_data)
-
+        self.__model.save_data_to_json()
         sys.exit()
-
-
-
-
-
 
