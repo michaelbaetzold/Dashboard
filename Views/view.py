@@ -80,9 +80,8 @@ class DegreeView(ttk.Frame):
         self.exams_bar = ttk.Progressbar(self, orient="horizontal", mode="determinate")
         self.exams_bar.grid(row=4, column=0, sticky="nsew", padx=10, pady=5)
 
-        # Set initial values for progress bars (if needed)
-        self.progress_bar["value"] = 50  # Example value
-        self.exams_bar["value"] = 30  # Example value
+        self.progress_bar["value"] = 0
+        self.exams_bar["value"] = 0
 
     def update_view_from_model(self, degree: DegreeProgram):
         self.degree_name_var.set(degree.name)
@@ -116,14 +115,12 @@ class SemesterOverView(ttk.Frame):
         # Create a Treeview widget in the left frame
         self.treeview = SemesterTreeview(self, columns=("average", "object_type"), show="tree")
         self.treeview["displaycolumns"] = ("average")
-        #self.treeview.column("#0", width=350)
         self.treeview.column("#1", width=10)
         self.treeview.pack(fill="both", expand=True)
 
     def create_tree_view_from_model(self, degree_program: DegreeProgram):
-
+        self.treeview.delete(*self.treeview.get_children())
         self.treeview.insert("", "end", "root_node", text=degree_program.name, values=("", "degree"))
-
         for semester_num, semester in enumerate(degree_program.semesters, start=1):
             # Insert the semester node under the root node
             semester_node = self.treeview.insert(
@@ -150,6 +147,9 @@ class SemesterTreeview(ttk.Treeview):
         # Create the color tags
         for entry in self.__grade_table_list:
             self.tag_configure(entry["color"], background=entry["color"])
+
+    def update_grade_list(self, grade_table_list):
+        self.__grade_table_list = grade_table_list
 
     def insert(self, parent, index, *args, **kwargs):
         # Call the original insert method to perform the insertion
@@ -180,45 +180,81 @@ class CourseView(ttk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # Create frames to group entry fields and labels
+        self.course_name_frame = ttk.Frame(self)
+        self.course_id_frame = ttk.Frame(self)
+        self.exam_details_frame = ttk.Frame(self)
+        self.grade_frame = ttk.Frame(self)
+        self.attempt_frame = ttk.Frame(self)
+        self.part_of_final_grade_frame = ttk.Frame(self)
+        self.ects_frame = ttk.Frame(self)
+
         # StringVars for entry fields
         self.course_name_var = tk.StringVar()
         self.course_id_var = tk.StringVar()
         self.exam_details_var = tk.StringVar()
-        self.grade_var = tk.StringVar()
+        self.grade_var = tk.DoubleVar()
         self.attempt_var = tk.IntVar()
         self.part_of_final_grade_var = tk.BooleanVar()
+        self.ects_var = tk.IntVar()
 
-        # Course name entry field
-        self.course_name_entry = ttk.Entry(self, textvariable=self.course_name_var)
-        self.course_name_entry.grid(row=0, column=0, sticky="ew", padx=10, pady=5)
+        # Course name entry field and label
+        self.course_name_label = ttk.Label(self.course_name_frame, text="Course Name")
+        self.course_name_label.grid(row=0, column=0, sticky="w", padx=10, pady=5)
+        self.course_name_entry = ttk.Entry(self.course_name_frame, textvariable=self.course_name_var)
+        self.course_name_entry.grid(row=1, column=0, sticky="ew", padx=10, pady=5, columnspan=2)
 
-        # Course ID entry field
-        self.course_id_entry = ttk.Entry(self, textvariable=self.course_id_var)
-        self.course_id_entry.grid(row=1, column=0, sticky="ew", padx=10, pady=5)
+        # Course ID entry field and label
+        self.course_id_label = ttk.Label(self.course_id_frame, text="Course ID")
+        self.course_id_label.grid(row=0, column=0, sticky="w", padx=10, pady=5)
+        self.course_id_entry = ttk.Entry(self.course_id_frame, textvariable=self.course_id_var)
+        self.course_id_entry.grid(row=1, column=0, sticky="ew", padx=10, pady=5, columnspan=2)
 
-        # Exam details entry field
-        self.exam_details_entry = ttk.Entry(self, textvariable=self.exam_details_var)
-        self.exam_details_entry.grid(row=2, column=0, sticky="ew", padx=10, pady=5)
+        # Exam details entry field and label
+        self.exam_details_label = ttk.Label(self.exam_details_frame, text="Exam Details")
+        self.exam_details_label.grid(row=0, column=0, sticky="w", padx=10, pady=5)
+        self.exam_details_entry = ttk.Entry(self.exam_details_frame, textvariable=self.exam_details_var)
+        self.exam_details_entry.grid(row=1, column=0, sticky="ew", padx=10, pady=5, columnspan=2)
 
-        # Grade entry field
-        self.grade_entry = ttk.Entry(self, textvariable=self.grade_var)
-        self.grade_entry.grid(row=3, column=0, sticky="ew", padx=10, pady=5)
+        # Grade entry field and label
+        self.grade_label = ttk.Label(self.grade_frame, text="Grade")
+        self.grade_label.grid(row=0, column=0, sticky="w", padx=10, pady=5)
+        self.grade_entry = ttk.Entry(self.grade_frame, textvariable=self.grade_var)
+        self.grade_entry.grid(row=1, column=0, sticky="ew", padx=10, pady=5, columnspan=2)
 
-        # Attempt entry field
-        self.attempt_entry = ttk.Entry(self, textvariable=self.attempt_var)
-        self.attempt_entry.grid(row=4, column=0, sticky="ew", padx=10, pady=5)
+        # Attempt entry field and label
+        self.attempt_label = ttk.Label(self.attempt_frame, text="Attempt")
+        self.attempt_label.grid(row=0, column=0, sticky="w", padx=10, pady=5)
+        self.attempt_entry = ttk.Entry(self.attempt_frame, textvariable=self.attempt_var)
+        self.attempt_entry.grid(row=1, column=0, sticky="ew", padx=10, pady=5, columnspan=2)
 
         # Part of final grade checkbox
-        self.part_of_final_grade_check = ttk.Checkbutton(self, text="Teil der Abschlussnote",
+        self.part_of_final_grade_check = ttk.Checkbutton(self.part_of_final_grade_frame,
+                                                         text="Teil der Abschlussnote",
                                                          variable=self.part_of_final_grade_var)
-        self.part_of_final_grade_check.grid(row=5, column=0, sticky="ew", padx=10, pady=5)
+        self.part_of_final_grade_check.grid(row=0, column=0, sticky="w", padx=10, pady=5, columnspan=2)
+
+        # ECTS label and entry field
+        self.ects_label = ttk.Label(self.ects_frame, text="ECTS")
+        self.ects_label.grid(row=0, column=0, sticky="w", padx=10, pady=5)
+        self.ects_entry = ttk.Entry(self.ects_frame, textvariable=self.ects_var)
+        self.ects_entry.grid(row=1, column=0, sticky="ew", padx=10, pady=5, columnspan=2)
 
         # Save button
         self.button = ttk.Button(self, text="Speichern")
-        self.button.grid(row=6, column=0, sticky="se", padx=10, pady=10)
+        self.button.grid(row=8, column=0, sticky="se", padx=10, pady=10)
+
+        # Place frames in grid
+        self.course_name_frame.grid(row=0, column=0, sticky="ew", padx=10, pady=5)
+        self.course_id_frame.grid(row=1, column=0, sticky="ew", padx=10, pady=5)
+        self.exam_details_frame.grid(row=2, column=0, sticky="ew", padx=10, pady=5)
+        self.grade_frame.grid(row=3, column=0, sticky="ew", padx=10, pady=5)
+        self.attempt_frame.grid(row=4, column=0, sticky="ew", padx=10, pady=5)
+        self.part_of_final_grade_frame.grid(row=5, column=0, sticky="ew", padx=10, pady=5)
+        self.ects_frame.grid(row=6, column=0, sticky="ew", padx=10, pady=5)
 
         # Configure row and column weights
-        self.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6), weight=1)
+        self.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6, 7, 8), weight=1)
         self.grid_columnconfigure(0, weight=1)
 
     def update_view_from_model(self, course: Course):
@@ -228,6 +264,7 @@ class CourseView(ttk.Frame):
         self.grade_var.set(course.exam.grade)
         self.attempt_var.set(course.exam.attempt)
         self.part_of_final_grade_var.set(course.exam.part_of_final_grade)
+        self.ects_var.set(course.ects)
 
 
 class SemesterView(ttk.Frame):

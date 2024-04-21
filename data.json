@@ -1,5 +1,22 @@
 {
-    "grade_goals": {},
+    "grade_goals": [
+        {
+            "grade": 6.0,
+            "color": "#FF2C2C"
+        },
+        {
+            "grade": 2.5,
+            "color": "orange"
+        },
+        {
+            "grade": 1.7,
+            "color": "yellow"
+        },
+        {
+            "grade": 1.3,
+            "color": "#39E75F"
+        }
+    ],
     "style": "Clam",
     "degree_program": {
         "name": "Angewandte K\u00fcnstliche Intelligenz",
@@ -13,7 +30,7 @@
                         "name": "Artificial Intelligence",
                         "ects": 5,
                         "exam": {
-                            "grade": 2.1,
+                            "grade": 1.1,
                             "exam_type": "Klausur",
                             "attempt": 1,
                             "part_of_final_grade": true
@@ -24,7 +41,7 @@
                         "name": "Einf\u00fchrung in das wissenschaftliche Arbeiten f\u00fcr IT und Technik",
                         "ects": 5,
                         "exam": {
-                            "grade": 0.0,
+                            "grade": 1.0,
                             "exam_type": "Advanced Workbook",
                             "attempt": 1,
                             "part_of_final_grade": true
@@ -46,7 +63,7 @@
                         "name": "Mathematics: Analysis",
                         "ects": 5,
                         "exam": {
-                            "grade": 3.6,
+                            "grade": 2.1,
                             "exam_type": "Klausur",
                             "attempt": 1,
                             "part_of_final_grade": true
@@ -64,7 +81,7 @@
                         }
                     }
                 ],
-                "semester_average": 2.2333333333333334
+                "semester_average": 1.3
             },
             {
                 "name": "Semester 2",
@@ -354,7 +371,7 @@
                     },
                     {
                         "course_id": "",
-                        "name": "Wahlpflichtmodul A",
+                        "name": "Wahlpflichtmodul C",
                         "ects": 10,
                         "exam": {
                             "grade": 0.0,

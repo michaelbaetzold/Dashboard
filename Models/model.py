@@ -17,6 +17,13 @@ class ExamTypes(Enum):
     BACHELOR_THESIS = "Bachelorarbeit"
     UNKNOWN = "Unbekannt"
 
+    @classmethod
+    def get_exam_type(cls, name):
+        for exam in ExamTypes:
+            if exam.value == name:
+                return exam
+
+
 
 class DegreeTypes(Enum):
     BACHELORS = 1
@@ -79,7 +86,11 @@ class Semester:
         self.semester_average = self.update_semester_average()
 
     def update_semester_average(self):
-        grades = [course.exam.grade for course in self.courses if course.exam.part_of_final_grade and course.exam.grade > 0.0]
+        grades = [
+            course.exam.grade
+            for course in self.courses
+            if course.exam.part_of_final_grade and float(course.exam.grade) > 0.0
+        ]
         self.semester_average = sum(grades) / len(grades) if grades else 0.0
         return self.semester_average
 
@@ -177,12 +188,13 @@ class Model:
 
     def update_course_model_from_view(self, new_course: Course):
         for semester in self.user.degree_program.semesters:
-            for index, course in semester.courses:
+            for index, course in enumerate(semester.courses):
                 if course.name == new_course.name or course.course_id == new_course.course_id:
                     semester.courses[index] = new_course
-
+                    semester.update_semester_average()
                     return
         print("unsuccessful update")
+
 
     def load_model_objects(self) -> User: # Keep as backup
         exams = [
