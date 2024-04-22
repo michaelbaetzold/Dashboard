@@ -209,7 +209,7 @@ class Model:
     def load_model_objects(self) -> User:  # Keep as backup
         exams = [
             Exam(1.2, ExamTypes.WRITTEN_EXAM, 1, True),  # Artificial Intelligence
-            Exam(2, ExamTypes.ADVANCED_WORKBOOK, 1, True),
+            Exam(2.0, ExamTypes.ADVANCED_WORKBOOK, 1, True),
             # Einführung in das wissenschaftliche Arbeiten für IT und Technik
             Exam(1.0, ExamTypes.WRITTEN_EXAM, 1, True),  # Einführung in die Programmierung mit Python
             Exam(2.1, ExamTypes.WRITTEN_EXAM, 1, True),  # Mathematics: Analysis
