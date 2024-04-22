@@ -41,7 +41,7 @@
                         "name": "Einf\u00fchrung in das wissenschaftliche Arbeiten f\u00fcr IT und Technik",
                         "ects": 5,
                         "exam": {
-                            "grade": 1.0,
+                            "grade": 1.2,
                             "exam_type": "Advanced Workbook",
                             "attempt": 1,
                             "part_of_final_grade": true
@@ -52,7 +52,7 @@
                         "name": "Einf\u00fchrung in die Programmierung mit Python",
                         "ects": 5,
                         "exam": {
-                            "grade": 1.0,
+                            "grade": 2.136,
                             "exam_type": "Klausur",
                             "attempt": 1,
                             "part_of_final_grade": true
@@ -63,7 +63,7 @@
                         "name": "Mathematics: Analysis",
                         "ects": 5,
                         "exam": {
-                            "grade": 2.1,
+                            "grade": 1.1,
                             "exam_type": "Klausur",
                             "attempt": 1,
                             "part_of_final_grade": true
@@ -81,7 +81,7 @@
                         }
                     }
                 ],
-                "semester_average": 1.3
+                "semester_average": 1.3840000000000001
             },
             {
                 "name": "Semester 2",

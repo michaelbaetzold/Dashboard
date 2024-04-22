@@ -1,5 +1,6 @@
+from views import *
 from controllers import *
-
+from models import *
 
 class App:
     def __init__(self):
