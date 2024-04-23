@@ -17,7 +17,7 @@ class Controller:
 
     def on_semester_treeview_click(self, event):
         item_id = event.widget.focus()
-        if not item_id:  # see handle_save_course_details
+        if not item_id:
             return
         view_name = self.__view.left_frame.treeview.item(item_id, "values")[1]
         item_name = event.widget.item(item_id)["text"]
@@ -57,6 +57,10 @@ class Controller:
     def handle_delete_course(self, event):
         self.handle_save_course_details(event)  # In case the fields were edited beforehand
         course_name = self.__view.central_frame.course_name_var.get()
+        treeview_id = self.__view.left_frame.treeview.get_id_from_name(course_name)
+        self.__view.left_frame.treeview.delete(treeview_id)
+        self.__view.left_frame.treeview.update()
+
         course = self.__model.get_course_from_name(course_name)
         for semester in self.__model.user.degree_program.semesters:
             if course in semester.courses:
@@ -64,12 +68,18 @@ class Controller:
                 del semester.courses[index]
                 break
 
-        treeview_id = self.__view.left_frame.treeview.get_id_from_name(course_name)
-        self.__view.left_frame.treeview.delete(treeview_id)
-        print("delete_course")
-
     def handle_delete_semester(self, event):
-        print("delete semester")
+        semester_name = self.__view.central_frame.semester_name_var.get()
+        treeview_id = self.__view.left_frame.treeview.get_id_from_name(semester_name)
+        self.__view.left_frame.treeview.delete(treeview_id)
+        self.__view.left_frame.treeview.update()
+
+        semester = self.__model.get_semester_from_name(semester_name)
+        semesters = self.__model.user.degree_program.semesters
+        if semester in semesters:
+            index = semesters.index(semester)
+            del semesters[index]
+
 
     def handle_update_course_view(self, item_name, item_id):
         self.__view.central_frame.update_view_from_model(self.__model.get_course_from_name(item_name))
@@ -117,15 +127,8 @@ class Controller:
                 new_semester_average = semester.update_semester_average()
                 new_semester_values = ("{:.2f}".format(new_semester_average), semester_values[1])
                 treeview.item(parent, values=new_semester_values)
-
-                # treeview.update()
                 treeview.selection_add(selection)
                 treeview.focus(selection)
-                # TODO debug and fix
-                # There is a problem with the select method. It raises the <<TreeviewSelect>>
-                # event, which triggers the on_semester_treeview_click method
-                # however the event doesn't have the x, y, coordinates and therefore finds no
-                # node and can't access the values tuple and throws an error.
 
             else:
                 print("Error at treeview update")

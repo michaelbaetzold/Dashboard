@@ -123,7 +123,7 @@ class SemesterOverView(ttk.Frame):
 
             semester_node = self.treeview.insert(
                 "root_node",
-                "end", text=f"Semester {semester_num}",
+                "end", text=semester.name,
                 values=("{:.2f}".format(semester.semester_average), "semester"))
 
             for course in semester.courses:
@@ -172,8 +172,17 @@ class SemesterTreeview(ttk.Treeview):
             values=("", "add_course"))
 
     def get_id_from_name(self, item_name: str):
-        children = self.get_children()
-        print()
+        children = self.get_children("root_node")
+        for child in children:
+            if self.item(child)["text"] == item_name:
+                return child
+            courses = self.get_children(child)
+            for course in courses:
+                if self.item(course)["text"] == item_name:
+                    return course
+        print("Name nicht gefunden")
+
+
 
     def add_course_node(self, item_id: str, course_name:str):
         current_index = self.index(item_id)

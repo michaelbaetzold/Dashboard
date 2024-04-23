@@ -179,17 +179,6 @@
                             "attempt": 1,
                             "part_of_final_grade": true
                         }
-                    },
-                    {
-                        "course_id": "DLBDSMLUSL01_D",
-                        "name": "Maschinelles Lernen - Unsupervised Learning und Feature Engineering",
-                        "ects": 5,
-                        "exam": {
-                            "grade": 0.0,
-                            "exam_type": "Fallstudie",
-                            "attempt": 1,
-                            "part_of_final_grade": true
-                        }
                     }
                 ],
                 "semester_average": 0.0
@@ -434,6 +423,11 @@
             },
             {
                 "name": "Semester 11",
+                "courses": [],
+                "semester_average": 0.0
+            },
+            {
+                "name": "Semester 12",
                 "courses": [],
                 "semester_average": 0.0
             }
