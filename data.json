@@ -421,6 +421,21 @@
                     }
                 ],
                 "semester_average": 0.0
+            },
+            {
+                "name": "Semester 9",
+                "courses": [],
+                "semester_average": 0.0
+            },
+            {
+                "name": "Semester 10",
+                "courses": [],
+                "semester_average": 0.0
+            },
+            {
+                "name": "Semester 11",
+                "courses": [],
+                "semester_average": 0.0
             }
         ],
         "start_date": "28 November 2023",

@@ -133,6 +133,19 @@ class SemesterOverView(ttk.Frame):
                     text=course.name,
                     values=("{:.2f}".format(course.exam.grade), "course"))
 
+            self.treeview.insert(
+                semester_node,
+                "end",
+                text="Kurs hinzufügen",
+                values=("", "add_course"))
+
+        self.treeview.insert(
+            "root_node",
+            "end",
+            text="Semester hinzufügen",
+            values=("", "add_semester"))
+
+
 
 class SemesterTreeview(ttk.Treeview):
     def __init__(self, *args, **kwargs):
@@ -143,6 +156,34 @@ class SemesterTreeview(ttk.Treeview):
         self.__grade_table_list = grade_table_list
         for entry in self.__grade_table_list:
             self.tag_configure(entry["color"], background=entry["color"])
+
+    def add_semester_node(self, semester_name: str, item_id: str):
+        current_index = self.index(item_id)
+        semester_node = self.insert(
+            "root_node",
+            current_index,
+            text=semester_name,
+            values=("0.00", "semester"))
+
+        self.insert(
+            semester_node,
+            "end",
+            text="Kurs hinzufügen",
+            values=("", "add_course"))
+
+    def get_id_from_name(self, item_name: str):
+        children = self.get_children()
+        print()
+
+    def add_course_node(self, item_id: str, course_name:str):
+        current_index = self.index(item_id)
+        semester_node = self.parent(item_id)
+        self.insert(
+            semester_node,
+            current_index,
+            text=course_name,
+            values=("0.00", "course"))
+        return self.item(semester_node)["text"]
 
     def insert(self, parent, index, *args, **kwargs):
         result = super().insert(parent, index, *args, **kwargs)
@@ -240,7 +281,9 @@ class CourseView(ttk.Frame):
         self.ects_entry = ttk.Entry(self.ects_frame, textvariable=self.ects_var)
         self.ects_entry.grid(row=1, column=0, sticky="ew", padx=10, pady=5, columnspan=3)
 
-        # Save button
+        # Buttons
+        self.button_del = ttk.Button(self, text="Kurs löschen")
+        self.button_del.grid(row=8, column=0, sticky="se", padx=100, pady=10)
         self.button = ttk.Button(self, text="Speichern")
         self.button.grid(row=8, column=0, sticky="se", padx=10, pady=10)
 
@@ -285,6 +328,9 @@ class SemesterView(ttk.Frame):
 
         self.treeview.heading("Course ID", text="Kurs ID")
         self.treeview.heading("Course Name", text="Kurs Name")
+
+        self.button_del = ttk.Button(self, text="Semester löschen")
+        self.button_del.grid(row=3, column=0, sticky="se", padx=10, pady=10)
 
     def update_view_from_model(self, semester: Semester):
         self.semester_name_var.set(semester.name)

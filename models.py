@@ -189,13 +189,17 @@ class Model:
             for course in semester.courses:
                 if course.name == name:
                     return course
-        return None
+        return None # TODO Error when inserting new course and saving name
 
     def get_semester_from_name(self, name):
         for semester in self.user.degree_program.semesters:
             if semester.name == name:
                 return semester
         return None
+
+    def get_next_semester_name(self):
+        current_semester_number = len(self.user.degree_program.semesters)
+        return f"Semester {current_semester_number + 1}"
 
     def update_course_model_from_view(self, new_course: Course):
         for semester in self.user.degree_program.semesters:

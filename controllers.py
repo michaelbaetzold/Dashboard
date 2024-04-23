@@ -11,7 +11,7 @@ class Controller:
         self.__view.left_frame.create_tree_view_from_model(self.__model.get_degree_program())
         self.__view.left_frame.treeview.bind("<<TreeviewSelect>>", self.on_semester_treeview_click)
         self.__view.switch("degree")
-        self.handle_update_degree_view("this string is irrelevant")
+        self.handle_update_degree_view("this string is irrelevant", "this as well")
         self.__view.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.__view.start_mainloop()
 
@@ -21,24 +21,67 @@ class Controller:
             return
         view_name = self.__view.left_frame.treeview.item(item_id, "values")[1]
         item_name = event.widget.item(item_id)["text"]
-        self.__view.switch(view_name)
+        if not "add_" in view_name:
+            self.__view.switch(view_name)
 
         switch_cases = {
             "course": self.handle_update_course_view,
             "degree": self.handle_update_degree_view,
             "semester": self.handle_update_semester_view,
+            "add_semester": self.handle_add_semester,
+            "add_course": self.handle_add_course,
         }
-        switch_cases.get(view_name, lambda: print("Unknown view"))(item_name)
+        switch_cases.get(view_name, lambda: print("Unknown view"))(item_name, item_id)
 
-    def handle_update_course_view(self, item_name):
+    def handle_add_semester(self, item_name, item_id):
+        semester_name = self.__model.get_next_semester_name()
+        self.__view.left_frame.treeview.add_semester_node(semester_name=semester_name, item_id=item_id)
+        self.__model.user.degree_program.semesters.append(Semester(semester_name, list(), 0.0))
+
+    def handle_add_course(self, item_name, item_id):
+        course = Course(
+            course_id="",
+            name="Neuer Kurs",
+            ects=5,
+            exam= Exam(
+                exam_type=ExamTypes.WRITTEN_EXAM,
+                attempt=1,
+                grade=0.00,
+                part_of_final_grade=True
+            )
+        )
+        semester_name = self.__view.left_frame.treeview.add_course_node(item_id, course.name)
+        semester = self.__model.get_semester_from_name(semester_name)
+        semester.courses.append(course)
+
+    def handle_delete_course(self, event):
+        self.handle_save_course_details(event)  # In case the fields were edited beforehand
+        course_name = self.__view.central_frame.course_name_var.get()
+        course = self.__model.get_course_from_name(course_name)
+        for semester in self.__model.user.degree_program.semesters:
+            if course in semester.courses:
+                index = semester.courses.index(course)
+                del semester.courses[index]
+                break
+
+        treeview_id = self.__view.left_frame.treeview.get_id_from_name(course_name)
+        self.__view.left_frame.treeview.delete(treeview_id)
+        print("delete_course")
+
+    def handle_delete_semester(self, event):
+        print("delete semester")
+
+    def handle_update_course_view(self, item_name, item_id):
         self.__view.central_frame.update_view_from_model(self.__model.get_course_from_name(item_name))
         self.__view.central_frame.button.bind("<Button-1>", self.handle_save_course_details)
+        self.__view.central_frame.button_del.bind("<Button-1>", self.handle_delete_course)
 
-    def handle_update_degree_view(self, item_name):
+    def handle_update_degree_view(self, item_name, item_id):
         self.__view.central_frame.update_view_from_model(self.__model.get_degree_program())
 
-    def handle_update_semester_view(self, item_name):
+    def handle_update_semester_view(self, item_name, item_id):
         self.__view.central_frame.update_view_from_model(self.__model.get_semester_from_name(item_name))
+        self.__view.central_frame.button_del.bind("<Button-1>", self.handle_delete_semester)
 
     def handle_save_course_details(self, event):
         course = Course(
@@ -76,6 +119,7 @@ class Controller:
                 treeview.item(parent, values=new_semester_values)
 
                 # treeview.update()
+                treeview.selection_add(selection)
                 treeview.focus(selection)
                 # TODO debug and fix
                 # There is a problem with the select method. It raises the <<TreeviewSelect>>
