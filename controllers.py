@@ -8,12 +8,43 @@ class Controller:
         self.__model = model
         self.__view = view
         self.__view.left_frame.treeview.update_grade_list(self.__model.user.grade_goals)
-        self.__view.left_frame.create_tree_view_from_model(self.__model.get_degree_program())
+        self.create_tree_view_from_model(self.__model.get_degree_program())
         self.__view.left_frame.treeview.bind("<<TreeviewSelect>>", self.on_semester_treeview_click)
         self.__view.switch("degree")
         self.handle_update_degree_view("this string is irrelevant", "this as well")
         self.__view.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.__view.start_mainloop()
+
+
+    def create_tree_view_from_model(self, degree_program: DegreeProgram):
+        treeview = self.__view.left_frame.treeview
+        treeview.delete(*treeview.get_children())
+        treeview.insert("", "end", "root_node", text=degree_program.name, values=("", "degree"))
+        for semester_num, semester in enumerate(degree_program.semesters, start=1):
+
+            semester_node = treeview.insert(
+                "root_node",
+                "end", text=semester.name,
+                values=("{:.2f}".format(semester.semester_average), "semester"))
+
+            for course in semester.courses:
+                treeview.insert(
+                    semester_node,
+                    "end",
+                    text=course.name,
+                    values=("{:.2f}".format(course.exam.grade), "course"))
+
+            treeview.insert(
+                semester_node,
+                "end",
+                text="Kurs hinzufügen",
+                values=("", "add_course"))
+
+        treeview.insert(
+            "root_node",
+            "end",
+            text="Semester hinzufügen",
+            values=("", "add_semester"))
 
     def on_semester_treeview_click(self, event):
         item_id = event.widget.focus()
@@ -105,7 +136,8 @@ class Controller:
                 part_of_final_grade=self.__view.central_frame.part_of_final_grade_var.get()
             )
         )
-        self.__model.update_course_model_from_view(course)
+        indices = self.__view.left_frame.treeview.get_focussed_indices()
+        self.__model.update_course_model_from_view(course, indices)
 
         # Update the semester treeview
         treeview = self.__view.left_frame.treeview

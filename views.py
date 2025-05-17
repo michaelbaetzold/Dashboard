@@ -116,35 +116,6 @@ class SemesterOverView(ttk.Frame):
         self.treeview.column("#1", width=10)
         self.treeview.pack(fill="both", expand=True)
 
-    def create_tree_view_from_model(self, degree_program: DegreeProgram):
-        self.treeview.delete(*self.treeview.get_children())
-        self.treeview.insert("", "end", "root_node", text=degree_program.name, values=("", "degree"))
-        for semester_num, semester in enumerate(degree_program.semesters, start=1):
-
-            semester_node = self.treeview.insert(
-                "root_node",
-                "end", text=semester.name,
-                values=("{:.2f}".format(semester.semester_average), "semester"))
-
-            for course in semester.courses:
-                self.treeview.insert(
-                    semester_node,
-                    "end",
-                    text=course.name,
-                    values=("{:.2f}".format(course.exam.grade), "course"))
-
-            self.treeview.insert(
-                semester_node,
-                "end",
-                text="Kurs hinzufügen",
-                values=("", "add_course"))
-
-        self.treeview.insert(
-            "root_node",
-            "end",
-            text="Semester hinzufügen",
-            values=("", "add_semester"))
-
 
 
 class SemesterTreeview(ttk.Treeview):
@@ -182,6 +153,11 @@ class SemesterTreeview(ttk.Treeview):
                     return course
         print("Name nicht gefunden")
 
+
+    def get_focussed_indices(self):
+        node = self.focus()
+        parent = self.parent(node)
+        return self.index(parent), self.index(node)
 
 
     def add_course_node(self, item_id: str, course_name:str):

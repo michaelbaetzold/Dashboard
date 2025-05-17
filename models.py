@@ -201,14 +201,16 @@ class Model:
         current_semester_number = len(self.user.degree_program.semesters)
         return f"Semester {current_semester_number + 1}"
 
-    def update_course_model_from_view(self, new_course: Course):
-        for semester in self.user.degree_program.semesters:
-            for index, course in enumerate(semester.courses):
-                if course.name == new_course.name or course.course_id == new_course.course_id:
-                    semester.courses[index] = new_course
-                    semester.update_semester_average()
-                    return
-        print("unsuccessful update")
+    def update_course_model_from_view(self, new_course: Course, indices):
+        courses = self.user.degree_program.semesters[indices[0]].courses
+        courses[indices[1]] = new_course
+        # for semester in self.user.degree_program.semesters:
+        #     for index, course in enumerate(semester.courses):
+        #         if course.name == new_course.name or course.course_id == new_course.course_id:
+        #             semester.courses[index] = new_course
+        #             semester.update_semester_average()
+        #             return
+        # print("unsuccessful update")
 
     def load_model_objects(self) -> User:  # Keep as backup
         exams = [
